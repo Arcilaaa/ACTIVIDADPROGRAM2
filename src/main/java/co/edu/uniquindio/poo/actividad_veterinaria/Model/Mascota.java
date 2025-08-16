@@ -8,6 +8,7 @@ public class Mascota {
     private String especie;
     private String raza;
     private byte edad;
+    private double cantidadMascotas = 0;
     private ArrayList<Veterinario> listaVeterinarios;
     private Mascota[] listaMascotas;
 
@@ -72,7 +73,7 @@ public class Mascota {
     }
     public String registrarMascota(Mascota mascota) {    // metodo que registra las mascotas
         String mensaje = "";                            // variable para los mensajes
-        int posDisponible = -1;                         //variable para ver si hay cupos para las mascotas
+        int posDisponible = -1;                          //variable para ver si hay cupos para las mascotas
 
         posDisponible = buscarPosicionDisponible();            //metodo que busca si hay posiciones disponibles
         if (posDisponible == -1) {
@@ -81,6 +82,7 @@ public class Mascota {
         }else{                                                   // y en caso de que existan posiciones disponibles agregue a la mascota
             listaMascotas[posDisponible] = mascota;
             mensaje = "Mascota agregada";
+            cantidadMascotas++;
         }
 
         return mensaje;
@@ -108,4 +110,29 @@ public class Mascota {
 
         return posDisponible;                      //si no hay posiciones disponibles retorna la variable que teniamos que es un espacio lleno
     }
+
+    public String actualizarMascota (String nuevoNombre , String nuevaEspecie,byte nuevaEdad, String nuevaRaza) {  // metodo que actualizara la informacion de la mascota
+    Mascota mascota = mascota.buscarMascota(nombre);    //metodo que busca la mascota que intentamos actualizar su informacion
+    if (mascota != null) {
+        mascota.setNombre(nuevoNombre);
+        mascota.setEspecie(nuevaEspecie);               // si encuentra la mascota realiza todos los cambios de la informacion de esta
+        mascota.setRaza(nuevaRaza);                     // y notifica que la informacion de la mascota fue actualizada
+        mascota.setEdad(nuevaEdad);
+        return "Mascota actualizada.";
+    }
+    return "Mascota no encontrada.";                    // si no esta la mascota notifica que no la encontro
+}
+    public String eliminarMascota(String nombre) {          //metodo el cual elimina la mascota que deseemos
+        for (int i = 0; i < cantidadMascotas; i++) {
+            if (listaMascotas[i].getNombre().equals(nombre)) {          // Mueve todas las mascotas después una posición atrás
+                for (int j = i; j < cantidadMascotas - 1; j++) {        // y de esta manera quita la mascota deseada sin dejar espacios
+                    listaMascotas[j] = listaMascotas[j + 1];
+                }
+                cantidadMascotas--;                                   // se descuenta 1 mascota a la cantidad que se tenia
+                return "Mascota eliminada.";
+            }
+        }
+        return "Mascota no encontrada.";
+    }
+
 }

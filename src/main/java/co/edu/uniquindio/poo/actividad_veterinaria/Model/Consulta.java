@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo.actividad_veterinaria.Model;
 
+import java.util.ArrayList;
+
 public class Consulta {
 
     private String fecha;
@@ -9,6 +11,8 @@ public class Consulta {
     private String motivo;
     private String diagnositco;
     private String tratamiento;
+    private Consulta[] listaConsultas;
+    private double cantidadConsultas = 0;
 
     public Consulta(String fecha, String hora, String mascotaasig, String veterinarioasig, String motivo, String diagnositco, String tratamiento) {
 
@@ -90,5 +94,44 @@ public class Consulta {
                 ", diagnositco='" + diagnositco + '\'' +
                 ", tratamiento='" + tratamiento + '\'' +
                 '}';
+    }
+
+        public String registrarConsulta(String fecha, String hora, String mascotaAsig, String veterinarioAsig,
+                                        String motivo, String diagnostico, String tratamiento) {
+            String mensaje = "";                            // Variable para los mensajes
+            int posDisponible = -1;                         // Variable para ver si hay cupos para nuevas consultas
+
+            posDisponible = buscarPosicionDisponible();
+            if (posDisponible == -1) {
+                mensaje = "No hay cupos disponibles para agendar más consultas";
+            } else {
+                // Crea la consulta y la guarda en la posición disponible
+                Consulta nuevaConsulta = new Consulta(fecha, hora, mascotaAsig, veterinarioAsig, motivo, diagnostico, tratamiento);
+                listaConsultas[posDisponible] = nuevaConsulta;
+                mensaje = "Consulta agendada correctamente";
+                cantidadConsultas++;
+            }
+            return mensaje;
+        }
+
+        private int buscarPosicionDisponible() {
+            int posDisponible = -1;
+            for (int i = 0; i < listaConsultas.length; i++) {
+                if (listaConsultas[i] == null) {          // Si encuentra un espacio vacío, retorna su posición
+                    return i;
+                }
+            }
+            return posDisponible;                         // Si no hay espacios, retorna -1
+        }
+
+        public Consulta buscarConsulta(String fecha) {                     //metodo que busca las consultas ya existentes
+            for (int i = 0; i < cantidadConsultas; i++) {
+                Consulta consultaAux = listaConsultas[i];                //variable que servira para comparar las fechas ya que buscamos por fechas
+                if (consultaAux.getFecha().equals(fecha)) {
+                    return consultaAux;
+                }
+            }
+            return null;
+        }
     }
 }

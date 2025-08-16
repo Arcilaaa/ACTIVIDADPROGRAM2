@@ -24,4 +24,5 @@ public abstract class Persona {
                 "nombre='" + nombre + '\'' +
                 '}';
     }
+
 }
